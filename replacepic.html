@@ -1,0 +1,720 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Photo Manager | Avalon Security</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="icon" type="image/png" href="images/page1_img4.png">
+    <style>
+        *,
+        *::before,
+        *::after {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --bg-primary: #ffffff;
+            --bg-secondary: #f8fafc;
+            --bg-tertiary: #f1f5f9;
+            --bg-elevated: #ffffff;
+            --text-primary: #0f172a;
+            --text-secondary: #475569;
+            --text-tertiary: #94a3b8;
+            --text-inverted: #ffffff;
+            --accent: #2563eb;
+            --accent-hover: #1d4ed8;
+            --accent-light: #dbeafe;
+            --border: #e2e8f0;
+            --success: #10b981;
+            --warning: #f59e0b;
+            --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            --radius-md: 8px;
+            --radius-lg: 12px;
+            --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.05);
+            --shadow-md: 0 4px 6px rgba(0, 0, 0, 0.07);
+            --transition-fast: 150ms ease;
+        }
+
+        [data-theme="dark"] {
+            --bg-primary: #0a0a0a;
+            --bg-secondary: #111111;
+            --bg-tertiary: #171717;
+            --bg-elevated: #1a1a1a;
+            --text-primary: #f8fafc;
+            --text-secondary: #a1a1aa;
+            --text-tertiary: #71717a;
+            --text-inverted: #0a0a0a;
+            --accent: #3b82f6;
+            --accent-hover: #60a5fa;
+            --accent-light: #1e3a5f;
+            --border: #27272a;
+        }
+
+        body {
+            font-family: var(--font-sans);
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            min-height: 100vh;
+            transition: background-color 0.2s, color 0.2s;
+        }
+
+        /* Password Overlay */
+        .password-overlay {
+            position: fixed;
+            inset: 0;
+            background: var(--bg-primary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 9999;
+        }
+
+        .password-box {
+            background: var(--bg-secondary);
+            padding: 2rem;
+            border-radius: var(--radius-lg);
+            border: 1px solid var(--border);
+            text-align: center;
+            max-width: 320px;
+            width: 90%;
+        }
+
+        .password-box h2 {
+            font-size: 1.25rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .password-box>p {
+            font-size: 0.875rem;
+            color: var(--text-secondary);
+            margin-bottom: 1.5rem;
+        }
+
+        .password-box input {
+            width: 100%;
+            padding: 0.75rem;
+            font-size: 1rem;
+            background: var(--bg-elevated);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-md);
+            color: var(--text-primary);
+            text-align: center;
+            margin-bottom: 0.5rem;
+        }
+
+        .password-box .error {
+            color: #ef4444;
+            font-size: 0.875rem;
+            margin-bottom: 0.5rem;
+            display: none;
+        }
+
+        .password-box button {
+            width: 100%;
+            padding: 0.75rem;
+            background: var(--accent);
+            color: var(--text-inverted);
+            border: none;
+            border-radius: var(--radius-md);
+            font-weight: 500;
+            cursor: pointer;
+        }
+
+        .hidden {
+            display: none !important;
+        }
+
+        /* Header */
+        .header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 1rem 1.5rem;
+            background: var(--bg-primary);
+            border-bottom: 1px solid var(--border);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .header-left {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .logo {
+            width: 32px;
+            height: 32px;
+        }
+
+        .header-title {
+            font-size: 1.125rem;
+            font-weight: 600;
+        }
+
+        .header-right {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.5rem 1rem;
+            font-size: 0.875rem;
+            font-weight: 500;
+            border-radius: var(--radius-md);
+            border: none;
+            cursor: pointer;
+            text-decoration: none;
+            transition: all var(--transition-fast);
+        }
+
+        .btn-ghost {
+            background: transparent;
+            color: var(--text-secondary);
+        }
+
+        .btn-ghost:hover {
+            background: var(--bg-secondary);
+            color: var(--text-primary);
+        }
+
+        .theme-toggle {
+            width: 40px;
+            height: 40px;
+            border-radius: var(--radius-md);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: transparent;
+            color: var(--text-secondary);
+            cursor: pointer;
+            border: none;
+        }
+
+        .theme-toggle:hover {
+            background: var(--bg-secondary);
+        }
+
+        .theme-toggle svg {
+            width: 20px;
+            height: 20px;
+        }
+
+        .icon-sun {
+            display: none;
+        }
+
+        .icon-moon {
+            display: block;
+        }
+
+        [data-theme="dark"] .icon-sun {
+            display: block;
+        }
+
+        [data-theme="dark"] .icon-moon {
+            display: none;
+        }
+
+        /* Main */
+        .main {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem 1.5rem;
+        }
+
+        .page-header {
+            margin-bottom: 2rem;
+        }
+
+        .page-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+
+        .page-desc {
+            color: var(--text-secondary);
+            font-size: 0.9375rem;
+        }
+
+        /* Photo Grid */
+        .photo-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .photo-card {
+            background: var(--bg-elevated);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-lg);
+            overflow: hidden;
+            transition: box-shadow 0.2s;
+        }
+
+        .photo-card:hover {
+            box-shadow: var(--shadow-md);
+        }
+
+        .photo-preview {
+            position: relative;
+            background: var(--bg-tertiary);
+            aspect-ratio: 16/10;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+        }
+
+        .photo-preview img {
+            max-width: 100%;
+            max-height: 100%;
+            object-fit: contain;
+        }
+
+        .photo-badge {
+            position: absolute;
+            top: 0.5rem;
+            right: 0.5rem;
+            background: rgba(0, 0, 0, 0.7);
+            color: white;
+            padding: 0.25rem 0.5rem;
+            border-radius: 4px;
+            font-size: 0.75rem;
+            font-weight: 500;
+        }
+
+        .photo-info {
+            padding: 1rem;
+        }
+
+        .photo-name {
+            font-weight: 600;
+            font-size: 0.9375rem;
+            margin-bottom: 0.25rem;
+        }
+
+        .photo-location {
+            font-size: 0.8125rem;
+            color: var(--text-secondary);
+            margin-bottom: 0.75rem;
+        }
+
+        .photo-meta {
+            display: flex;
+            gap: 1rem;
+            font-size: 0.8125rem;
+            color: var(--text-tertiary);
+            margin-bottom: 0.5rem;
+        }
+
+        .photo-meta span {
+            display: flex;
+            align-items: center;
+            gap: 0.25rem;
+        }
+
+        .canvas-size {
+            font-size: 1rem;
+            font-weight: 700;
+            color: var(--accent);
+        }
+
+        .photo-canvas-note {
+            font-size: 0.75rem;
+            color: var(--text-tertiary);
+            margin-bottom: 1rem;
+            padding-bottom: 0.75rem;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .photo-actions {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .btn-action {
+            flex: 1;
+            padding: 0.625rem;
+            font-size: 0.8125rem;
+            font-weight: 500;
+            border-radius: var(--radius-md);
+            cursor: pointer;
+            transition: all var(--transition-fast);
+            border: 1px solid var(--border);
+            background: var(--bg-secondary);
+            color: var(--text-primary);
+        }
+
+        .btn-action:hover {
+            border-color: var(--accent);
+            color: var(--accent);
+        }
+
+        .btn-action.primary {
+            background: var(--accent);
+            color: var(--text-inverted);
+            border-color: var(--accent);
+        }
+
+        .btn-action.primary:hover {
+            background: var(--accent-hover);
+        }
+
+        /* File Input */
+        .file-input {
+            display: none;
+        }
+
+        /* Toast */
+        .toast {
+            position: fixed;
+            bottom: 1.5rem;
+            right: 1.5rem;
+            padding: 1rem 1.25rem;
+            background: var(--success);
+            color: white;
+            border-radius: var(--radius-md);
+            font-size: 0.875rem;
+            font-weight: 500;
+            box-shadow: var(--shadow-md);
+            animation: slideUp 0.3s ease;
+            z-index: 1000;
+        }
+
+        @keyframes slideUp {
+            from {
+                transform: translateY(100%);
+                opacity: 0;
+            }
+
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+
+        /* Recommended Size Banner */
+        .size-banner {
+            background: var(--accent-light);
+            border: 1px solid var(--accent);
+            border-radius: var(--radius-md);
+            padding: 0.75rem 1rem;
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.875rem;
+            color: var(--accent);
+        }
+
+        [data-theme="dark"] .size-banner {
+            color: var(--text-primary);
+        }
+
+        .size-banner svg {
+            flex-shrink: 0;
+        }
+
+        /* Responsive */
+        @media (max-width: 600px) {
+            .photo-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .main {
+                padding: 1rem;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Password Protection -->
+    <div class="password-overlay" id="passwordOverlay">
+        <div class="password-box">
+            <h2>🔒 Admin Access</h2>
+            <p>Enter password to manage photos</p>
+            <input type="password" id="passwordInput" placeholder="Password" autofocus>
+            <p class="error" id="passwordError">Incorrect password</p>
+            <button id="passwordSubmit">Enter</button>
+        </div>
+    </div>
+
+    <!-- Header -->
+    <header class="header">
+        <div class="header-left">
+            <img src="images/page1_img4.png" alt="Avalon" class="logo">
+            <h1 class="header-title">Photo Manager</h1>
+        </div>
+        <div class="header-right">
+            <a href="index.html" class="btn btn-ghost">← Back to Website</a>
+            <button class="theme-toggle" id="themeToggle" aria-label="Toggle theme">
+                <svg class="icon-moon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" />
+                </svg>
+                <svg class="icon-sun" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+                    <circle cx="12" cy="12" r="5" />
+                    <path
+                        d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42" />
+                </svg>
+            </button>
+        </div>
+    </header>
+
+    <main class="main">
+        <div class="page-header">
+            <h2 class="page-title">Website Photos</h2>
+            <p class="page-desc">Click "Change" to upload a new image. The new image will replace the current one.</p>
+        </div>
+
+        <div class="size-banner">
+            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none"
+                stroke="currentColor" stroke-width="2">
+                <circle cx="12" cy="12" r="10" />
+                <path d="M12 16v-4M12 8h.01" />
+            </svg>
+            <span><strong>Website Canvas:</strong> Optimized for 1920×1080 (Full HD). Images are displayed
+                responsively.</span>
+        </div>
+
+        <div class="photo-grid" id="photoGrid">
+            <!-- Photos will be rendered here by JavaScript -->
+        </div>
+    </main>
+
+    <script>
+        // Password Protection
+        const CORRECT_PASSWORD = 'kimkitkk';
+
+        function checkPassword() {
+            const overlay = document.getElementById('passwordOverlay');
+            const input = document.getElementById('passwordInput');
+            const error = document.getElementById('passwordError');
+            const submitBtn = document.getElementById('passwordSubmit');
+
+            if (sessionStorage.getItem('avalon-auth') === 'true') {
+                overlay.classList.add('hidden');
+                return;
+            }
+
+            function attemptLogin() {
+                if (input.value === CORRECT_PASSWORD) {
+                    sessionStorage.setItem('avalon-auth', 'true');
+                    overlay.classList.add('hidden');
+                } else {
+                    error.style.display = 'block';
+                    input.value = '';
+                    input.focus();
+                }
+            }
+
+            submitBtn.addEventListener('click', attemptLogin);
+            input.addEventListener('keypress', (e) => {
+                if (e.key === 'Enter') attemptLogin();
+            });
+        }
+
+        // Theme Toggle
+        function initTheme() {
+            const toggle = document.getElementById('themeToggle');
+            const html = document.documentElement;
+
+            function getTheme() {
+                const saved = localStorage.getItem('avalon-theme');
+                if (saved) return saved;
+                return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+            }
+
+            function setTheme(theme) {
+                html.dataset.theme = theme;
+                localStorage.setItem('avalon-theme', theme);
+            }
+
+            setTheme(getTheme());
+
+            toggle.addEventListener('click', () => {
+                const current = html.dataset.theme || 'light';
+                setTheme(current === 'dark' ? 'light' : 'dark');
+            });
+        }
+
+        // Photo Data with EXACT canvas sizes for each section
+        const photos = [
+            {
+                id: 'logo',
+                name: 'Company Logo',
+                file: 'images/page1_img4.png',
+                location: 'Navigation, Hero, Footer',
+                canvas: '200 × 200',
+                canvasNote: 'Square PNG with transparency'
+            },
+            {
+                id: 'about',
+                name: 'About Section Image',
+                file: 'images/page7_img2.png',
+                location: 'About Us Section',
+                canvas: '800 × 600',
+                canvasNote: '4:3 landscape ratio'
+            },
+            {
+                id: 'why-us',
+                name: 'Why Us Section Image',
+                file: 'images/page8_img2.png',
+                location: 'Why Choose Us Section',
+                canvas: '1200 × 600',
+                canvasNote: '2:1 wide banner'
+            },
+            {
+                id: 'chairman',
+                name: 'Chairman Photo',
+                file: 'images/page12_img1.png',
+                location: 'Leadership Section',
+                canvas: '400 × 400',
+                canvasNote: 'Square portrait'
+            },
+            {
+                id: 'md',
+                name: 'Managing Director Photo',
+                file: 'images/page12_img2.png',
+                location: 'Leadership Section',
+                canvas: '400 × 400',
+                canvasNote: 'Square portrait'
+            },
+            {
+                id: 'guard-corporate',
+                name: 'Corporate Guard',
+                file: 'images/page14_img5.png',
+                location: 'Guard Types Section',
+                canvas: '400 × 533',
+                canvasNote: '3:4 portrait'
+            },
+            {
+                id: 'guard-millennium',
+                name: 'Millennium Guard',
+                file: 'images/page14_img7.png',
+                location: 'Guard Types Section',
+                canvas: '400 × 533',
+                canvasNote: '3:4 portrait'
+            },
+            {
+                id: 'guard-standard',
+                name: 'Standard Guard',
+                file: 'images/page15_img4.png',
+                location: 'Guard Types Section',
+                canvas: '400 × 533',
+                canvasNote: '3:4 portrait'
+            },
+            {
+                id: 'guard-general',
+                name: 'General Guard',
+                file: 'images/page15_img6.png',
+                location: 'Guard Types Section',
+                canvas: '400 × 533',
+                canvasNote: '3:4 portrait'
+            }
+        ];
+
+        // Render Photos
+        function renderPhotos() {
+            const grid = document.getElementById('photoGrid');
+            grid.innerHTML = photos.map(photo => `
+                <div class="photo-card" data-id="${photo.id}">
+                    <div class="photo-preview">
+                        <img src="${photo.file}?t=${Date.now()}" alt="${photo.name}" id="img-${photo.id}">
+                        <span class="photo-badge" id="size-${photo.id}">Loading...</span>
+                    </div>
+                    <div class="photo-info">
+                        <div class="photo-name">${photo.name}</div>
+                        <div class="photo-location">📍 ${photo.location}</div>
+                        <div class="photo-meta">
+                            <span>📐 <strong>Canvas Size:</strong> <span class="canvas-size">${photo.canvas} px</span></span>
+                        </div>
+                        <div class="photo-canvas-note">${photo.canvasNote}</div>
+                        <div class="photo-actions">
+                            <button class="btn-action" onclick="viewImage('${photo.file}')">View Full</button>
+                            <button class="btn-action primary" onclick="changeImage('${photo.id}', '${photo.file}')">Change</button>
+                        </div>
+                    </div>
+                    <input type="file" class="file-input" id="file-${photo.id}" accept="image/*" onchange="handleFileSelect(event, '${photo.id}', '${photo.file}')">
+                </div>
+            `).join('');
+
+            // Load image dimensions
+            photos.forEach(photo => {
+                const img = document.getElementById(`img-${photo.id}`);
+                img.onload = function () {
+                    document.getElementById(`size-${photo.id}`).textContent = `${this.naturalWidth} × ${this.naturalHeight}`;
+                };
+            });
+        }
+
+        // View Image
+        function viewImage(file) {
+            window.open(file, '_blank');
+        }
+
+        // Change Image
+        function changeImage(id, currentFile) {
+            document.getElementById(`file-${id}`).click();
+        }
+
+        // Handle File Select
+        function handleFileSelect(event, id, targetFile) {
+            const file = event.target.files[0];
+            if (!file) return;
+
+            // For static sites, we can only preview - actual file replacement requires backend
+            // But we'll show a preview and provide download instructions
+
+            const reader = new FileReader();
+            reader.onload = function (e) {
+                // Update preview
+                const img = document.getElementById(`img-${id}`);
+                img.src = e.target.result;
+
+                // Update dimensions after load
+                img.onload = function () {
+                    document.getElementById(`size-${id}`).textContent = `${this.naturalWidth} × ${this.naturalHeight}`;
+                };
+
+                showToast(`Preview updated! To save permanently, replace "${targetFile}" with your new image file.`);
+            };
+            reader.readAsDataURL(file);
+        }
+
+        // Show Toast
+        function showToast(message) {
+            const existing = document.querySelector('.toast');
+            if (existing) existing.remove();
+
+            const toast = document.createElement('div');
+            toast.className = 'toast';
+            toast.textContent = message;
+            document.body.appendChild(toast);
+
+            setTimeout(() => toast.remove(), 5000);
+        }
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', function () {
+            checkPassword();
+            initTheme();
+            renderPhotos();
+        });
+    </script>
+</body>
+
+</html>
