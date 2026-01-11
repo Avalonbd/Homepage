@@ -315,6 +315,25 @@ h6 {
     background: var(--accent-hover);
 }
 
+/* Language Toggle */
+.lang-toggle {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    border-radius: var(--radius-md);
+    color: var(--text-secondary);
+    font-size: var(--text-sm);
+    font-weight: 600;
+    transition: background-color var(--transition-fast), color var(--transition-fast);
+}
+
+.lang-toggle:hover {
+    background-color: var(--bg-secondary);
+    color: var(--text-primary);
+}
+
 /* Theme Toggle */
 .theme-toggle {
     display: flex;
