@@ -14,9 +14,11 @@ const translations = {
             clients: "Clients",
             leadership: "Leadership",
             pricing: "Pricing",
-            contact: "Contact Us"
+            contact: "Contact Us",
+            brand: "Avalon Security"
         },
         hero: {
+            titleMain: "Avalon Security",
             titleSub: "Services Limited",
             tagline: "\"Assurance Beyond Protection\"",
             description: "Your steadfast guardian in Bangladesh, providing tailored security solutions to protect what matters most.",
@@ -166,9 +168,11 @@ const translations = {
             clients: "গ্রাহকবৃন্দ",
             leadership: "পরিচালনা পর্ষদ",
             pricing: "মূল্য তালিকা",
-            contact: "যোগাযোগ"
+            contact: "যোগাযোগ",
+            brand: "এভালন সিকিউরিটি"
         },
         hero: {
+            titleMain: "এভালন সিকিউরিটি",
             titleSub: "সার্ভিসেস লিমিটেড",
             tagline: "\"সম্পূর্ণ নিরাপত্তার বিশ্বস্ত প্রতিশ্রুতি\"",
             description: "বাংলাদেশে আপনার বিশ্বস্ত অভিভাবক, আপনার মূল্যবান সম্পদ রক্ষায় আমরা প্রদান করি সুনিপুণ নিরাপত্তা সমাধান।",
